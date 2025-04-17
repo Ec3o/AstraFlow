@@ -28,24 +28,24 @@ export default function ChatLayout() {
 
   const handleSend = async () => {
     if (!input.trim()) return
-    const userMsg = { role: "user", content: input }
+  
+    const userMsg: Message = { role: "user", content: input } // ✅ 明确告诉 TS 它是 Message 类型
+  
     setMessages((prev) => [...prev, userMsg])
     setInput("")
     setLoading(true)
-
+  
     try {
       const res = await chatCompletions([...messages, userMsg])
       const reply = res.choices[0].message.content
-      setMessages((prev) => [...prev, { role: "assistant", content: reply }])
+      setMessages((prev) => [...prev, { role: "assistant", content: reply } as Message])
     } catch {
-      setMessages((prev) => [
-        ...prev,
-        { role: "assistant", content: "出错了，请稍后再试。" },
-      ])
+      setMessages((prev) => [...prev, { role: "assistant", content: "出错了，请稍后再试。" } as Message])
     } finally {
       setLoading(false)
     }
   }
+  
 
   return (
     <div className="flex h-screen bg-white dark:bg-[#1a1a1a] text-black dark:text-white transition-colors duration-300">

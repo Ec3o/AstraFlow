@@ -1,9 +1,10 @@
 import { useRef, useState, useEffect } from "react"
-import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
 import { ScrollArea } from "@/components/ui/scroll-area"
 import { cn } from "@/lib/utils"
 import { useChatStream } from "@/hooks/useChatStream"
+import DeepSeekIcon from "@/components/icon/DeepSeekIcon"
+import MarkdownMessage from "@/components/chat/MarkdownMessage"
 
 interface Message {
   role: "user" | "assistant"
@@ -12,7 +13,7 @@ interface Message {
 
 export default function ChatStreamLayout() {
   const [messages, setMessages] = useState<Message[]>([
-    { role: "assistant", content: "你好，我是 DeepSeek Chat 流式模式！" },
+    { role: "assistant", content: "🫡 Hi ! How can i help you today ?" },
   ])
   const [input, setInput] = useState("")
   const [partial, setPartial] = useState("")
@@ -25,7 +26,7 @@ export default function ChatStreamLayout() {
 
   const handleSend = async () => {
     if (!input.trim()) return
-    const userMsg = { role: "user", content: input }
+    const userMsg: Message = { role: "user", content: input }
     setMessages((prev) => [...prev, userMsg])
     setInput("")
     setPartial("")
@@ -44,36 +45,42 @@ export default function ChatStreamLayout() {
     <div className="flex h-screen bg-white dark:bg-[#1a1a1a] text-black dark:text-white transition-colors duration-300">
       {/* Sidebar */}
       <aside className="w-16 bg-gray-100 dark:bg-gray-900 flex flex-col items-center gap-4 py-4">
-        <div className="w-10 h-10 bg-purple-500 text-white rounded-full flex items-center justify-center">⚡</div>
+        <div className="w-10 h-10 bg-blue-500 text-white rounded-full flex items-center justify-center"><DeepSeekIcon /></div>
       </aside>
 
       {/* Chat area */}
       <main className="flex-1 flex flex-col">
         {/* Header */}
         <div className="p-4 border-b bg-gray-100 dark:bg-gray-900 dark:border-gray-700 font-bold text-lg">
-          DeepSeek Chat - 流式模式
+        ✨AstraFlow ChatUI
         </div>
 
         {/* Messages */}
         <ScrollArea className="flex-1 p-4 space-y-3">
           {messages.map((msg, idx) => (
             <div key={idx} className={`flex ${msg.role === "user" ? "justify-end" : "justify-start"}`}>
-              <div className={cn(
-                "max-w-[70%] px-4 py-2 rounded-xl text-sm shadow",
-                msg.role === "user"
-                  ? "bg-blue-600 text-white rounded-br-none"
-                  : "bg-gray-200 dark:bg-gray-700 text-black dark:text-white rounded-bl-none"
-              )}>
-                {msg.content}
+              <div
+                className={cn(
+                  "max-w-[75%] px-4 py-2 rounded-xl text-sm shadow whitespace-pre-wrap",
+                  msg.role === "user"
+                    ? "bg-blue-600 text-white rounded-br-none"
+                    : "bg-gray-200 dark:bg-gray-700 text-black dark:text-white rounded-bl-none"
+                )}
+              >
+                {msg.role === "user" ? (
+                  msg.content
+                ) : (
+                  <MarkdownMessage content={msg.content} />
+                )}
               </div>
             </div>
           ))}
 
+          {/* 流式内容 */}
           {partial && (
             <div className="flex justify-start">
-              <div className="max-w-[70%] px-4 py-2 rounded-xl text-sm shadow bg-gray-200 dark:bg-gray-700 text-black dark:text-white rounded-bl-none">
-                {partial}
-                <span className="animate-pulse text-muted-foreground">▍</span>
+              <div className="max-w-[75%] px-4 py-2 rounded-xl text-sm shadow bg-gray-200 dark:bg-gray-700 text-black dark:text-white rounded-bl-none whitespace-pre-wrap">
+                <MarkdownMessage content={partial + "▍"} />
               </div>
             </div>
           )}
