@@ -17,6 +17,7 @@ export default function ChatStreamLayout() {
     { role: "assistant", content: "🫡 Hi ! How can i help you today ?" },
   ])
   const [model, setModel] = useState<"deepseek-chat" | "deepseek-reasoner">("deepseek-chat")
+  const [loading, setLoading] = useState(false)
   const [input, setInput] = useState("")
   const [partial, setPartial] = useState("") // 用来显示部分内容的变量
   const { sendMessage, streaming } = useChatStream()
@@ -44,7 +45,7 @@ export default function ChatStreamLayout() {
 
     setInput("")
     setPartial("")
-
+    setLoading(true)
     // 逐步更新推理链
     await sendMessage(
       [...messages, userMsg],
@@ -87,6 +88,7 @@ export default function ChatStreamLayout() {
       },
       model
     )
+    setLoading(false)
   }
 
 
@@ -119,29 +121,26 @@ export default function ChatStreamLayout() {
                 {msg.role === "user" ? (
                   msg.content
                 ) : (
-                  <>
+                    <>
+                    {console.log("Rendering message:", msg)}
+                    {loading && idx === messages.length - 1 && (
+                      <div className="text-sm text-muted-foreground animate-pulse">
+                      {model === "deepseek-chat" ? "DeepSeek-V3" : "DeepSeek-R1"} 正在思考中...
+                      </div>
+                    )}
                     {/* Display reasoning content (streaming chain) */}
                     {msg.reasoning_content && (
                       <div className="mb-2 p-2 bg-gray-100 dark:bg-gray-700 rounded-lg border-l-4 border-blue-500 text-sm text-gray-600 dark:text-gray-400">
-                        <MarkdownMessage content={msg.reasoning_content} />
+                      <MarkdownMessage content={msg.reasoning_content} />
                       </div>
                     )}
                     {/* Display final message content */}
                     <MarkdownMessage content={msg.content} />
-                  </>
+                    </>
                 )}
               </div>
             </div>
           ))}
-
-          {/* Streamed content */}
-          {partial && (
-            <div className="flex justify-start">
-              <div className="max-w-[75%] px-4 py-2 rounded-xl text-sm shadow bg-gray-200 dark:bg-gray-700 text-black dark:text-white rounded-bl-none whitespace-pre-wrap">
-                <MarkdownMessage content={partial + "▍"} />
-              </div>
-            </div>
-          )}
 
           <div ref={bottomRef} />
         </ScrollArea>
@@ -153,8 +152,8 @@ export default function ChatStreamLayout() {
             value={model}
             onChange={(e) => setModel(e.target.value as "deepseek-chat" | "deepseek-reasoner")}
           >
-            <option value="deepseek-chat">Chat 模型</option>
-            <option value="deepseek-reasoner">Reasoner 模型</option>
+            <option value="deepseek-chat">DeepSeek-V3</option>
+            <option value="deepseek-reasoner">DeepSeek-R1</option>
           </select>
         </div>
         <div className="p-4 border-t bg-gray-100 dark:bg-gray-900 dark:border-gray-700">
