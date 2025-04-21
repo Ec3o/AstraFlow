@@ -157,7 +157,7 @@ export default function ChatStreamLayout() {
           </select>
         </div>
         <div className="p-4 border-t bg-gray-100 dark:bg-gray-900 dark:border-gray-700">
-          <div className="max-w-4xl mx-auto bg-muted dark:bg-gray-800 rounded-2xl px-4 py-3 flex items-center gap-2 shadow-inner">
+          <div className="max-w-4xl mx-auto bg-gray-300 dark:bg-gray-600 rounded-2xl px-4 py-3 flex items-center gap-2 shadow-inner">
             <input
               className="flex-1 bg-transparent outline-none text-sm placeholder:text-muted-foreground text-foreground"
               placeholder="输入消息..."

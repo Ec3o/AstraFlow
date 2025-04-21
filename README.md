@@ -12,3 +12,7 @@ TodoList:
 - 美化界面
 
 2025.4.20 弄了一晚上，终于搞好了思维链的前端渲染支持
+2025.4.21 react-markdown 在新版本不支持inline参数了，很头疼。
+好在有大佬写过博客踩过坑：
+[React的Markdown渲染](https://cytrogen.icu/posts/c0fc)
+想搞latex渲染，试了几个库都感觉效果不是很好，暂时搁置了。

@@ -1,8 +1,14 @@
+// src/components/theme/ThemeToggle.tsx
 import { useTheme } from "@/hooks/useTheme"
 import { Button } from "@/components/ui/button"
 import { Moon, Sun } from "lucide-react"
+import { cn } from "@/lib/utils"
 
-export default function ThemeToggle() {
+interface ThemeToggleProps {
+  className?: string
+}
+
+export default function ThemeToggle({ className }: ThemeToggleProps) {
   const { isDark, toggleTheme } = useTheme()
 
   return (
@@ -11,7 +17,10 @@ export default function ThemeToggle() {
       size="icon"
       onClick={toggleTheme}
       aria-label="切换主题"
-      className="absolute top-4 right-4 text-gray-500 dark:text-white hover:bg-muted"
+      className={cn(
+        "text-gray-500 dark:text-white hover:bg-muted",
+        className
+      )}
     >
       {isDark ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
     </Button>
