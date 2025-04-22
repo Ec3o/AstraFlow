@@ -168,16 +168,17 @@ export default function ChatStreamLayout() {
             <option value="deepseek-reasoner">DeepSeek-R1</option>
           </select>
         </div>
-        <div className="p-4 border-t bg-gray-100 dark:bg-gray-900 dark:border-gray-700">
-          <div className="max-w-4xl mx-auto bg-gray-300 dark:bg-gray-600 rounded-2xl px-4 py-3 flex items-center gap-2 shadow-inner">
-            <input
-              className="flex-1 bg-transparent outline-none text-sm placeholder:text-muted-foreground text-foreground"
-              placeholder="输入消息..."
-              value={input}
-              onChange={(e) => setInput(e.target.value)}
-              onKeyDown={(e) => e.key === "Enter" && handleSend()}
-              disabled={streaming}
-            />
+        <div className="p-4 border-t bg-blue-200 dark:bg-gray-900 dark:border-gray-700 ">
+          <div className="max-w-4xl mx-auto bg-gray-300 dark:bg-gray-600 rounded-2xl px-4 py-3 flex items-center gap-2 shadow-inner focus:ring focus:ring-violet-300 dark:visited:ring dark:visited:ring-violet-300  hover:ring-2 hover:ring-blue-300 transition-all duration-300">
+          <input
+            className="flex-1 bg-transparent outline-none text-sm placeholder:text-muted-foreground text-foreground rounded-lg"
+            placeholder="输入消息..."
+            value={input}
+            onChange={(e) => setInput(e.target.value)}
+            onKeyDown={(e) => e.key === "Enter" && handleSend()}
+            disabled={streaming}
+          />
+
             <Button
               variant="ghost"
               size="icon"

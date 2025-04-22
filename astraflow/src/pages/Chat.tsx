@@ -15,7 +15,7 @@ export default function ChatPage() {
   const [expanded, setExpanded] = useState(true)
 
   return (
-    <div className="relative h-screen flex overflow-hidden">
+    <div className="relative h-screen flex">
       {/* sidebar */}
       <aside
         className={`bg-gray-100 dark:bg-gray-900 border-r dark:border-gray-700
@@ -29,7 +29,7 @@ export default function ChatPage() {
           </button>
         </div>
 
-        <div className="p-2 space-y-1 overflow-y-auto h-[calc(100%-3rem)]">
+        <div className="p-2 space-y-1 h-[calc(100%-3rem)]">
           {history.map((h) => (
             <SidebarChatItem
               key={h.id}

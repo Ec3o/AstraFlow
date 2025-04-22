@@ -17,3 +17,4 @@ TodoList:
 [React的Markdown渲染](https://cytrogen.icu/posts/c0fc)
 想搞latex渲染，试了几个库都感觉效果不是很好，暂时搁置了。
 2025.4.22 修了一些小bug，感觉更ok了，顺便把主页变的更炫酷了一点
+想支持对话历史记录的话，我需要新建一个后端，通过后端代理DeepSeek API来实现.打算在前端对话比较完善之后，尝试写一个后端,并用nginx做一下封装

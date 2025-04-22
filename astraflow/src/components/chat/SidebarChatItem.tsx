@@ -20,9 +20,10 @@ export default function SidebarChatItem({ item, active, onSelect }: Props) {
         // Hover 效果
         "hover:bg-gray-300 hover:text-gray-900 dark:hover:bg-gray-700 dark:hover:text-gray-100"
       )}
+      style={{ borderRadius: '8px' }}
     >
       <div className="truncate">{item.title}</div>
-      <div className="truncate text-xs text-gray-500 dark:text-gray-400">
+      <div className="truncate text-xs text-gray-500 dark:text-gray-400 rounded-lg">
         {item.lastMessage}
       </div>
     </button>
