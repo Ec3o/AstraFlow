@@ -6,33 +6,37 @@ interface TitleRendererProps {
 }
 
 const TitleRenderer = ({ children, level }: TitleRendererProps) => {
-  let className = "text-white font-bold my-4"; // 默认样式
+  // 基础样式支持浅色和深色模式的切换
+  const baseClassName = "font-bold my-4 text-gray-800 dark:text-white";
 
-  // 根据标题级别设置不同的样式
+  // 不同标题级别对应的字体大小
+  const headingClasses: Record<number, string> = {
+    1: "text-4xl",
+    2: "text-3xl",
+    3: "text-2xl",
+    4: "text-xl",
+    5: "text-lg",
+    6: "text-base",
+  };
+
+  const className = `${baseClassName} ${headingClasses[level] || "text-lg"}`;
+
   switch (level) {
     case 1:
-      className += " text-4xl"; // h1 样式
-      break;
+      return <h1 className={className}>{children}</h1>;
     case 2:
-      className += " text-3xl"; // h2 样式
-      break;
+      return <h2 className={className}>{children}</h2>;
     case 3:
-      className += " text-2xl"; // h3 样式
-      break;
+      return <h3 className={className}>{children}</h3>;
     case 4:
-      className += " text-xl"; // h4 样式
-      break;
+      return <h4 className={className}>{children}</h4>;
     case 5:
-      className += " text-lg"; // h5 样式
-      break;
+      return <h5 className={className}>{children}</h5>;
     case 6:
-      className += " text-base"; // h6 样式
-      break;
+      return <h6 className={className}>{children}</h6>;
     default:
-      className += " text-lg"; // 默认样式
+      return <div className={className}>{children}</div>;
   }
-
-  return <div className={className}>{children}</div>;
 };
 
 export default TitleRenderer;

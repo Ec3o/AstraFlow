@@ -47,7 +47,7 @@ export default function ChatPage() {
       {/* main */}
       <main className="flex-1 relative h-full">
         <ThemeToggle className="absolute top-3 right-3 z-10" />
-        <ChatStreamLayout key={activeId} chatId={activeId} />
+        <ChatStreamLayout key={activeId}/>
       </main>
     </div>
   )

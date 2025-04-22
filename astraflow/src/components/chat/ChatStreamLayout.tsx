@@ -10,11 +10,12 @@ interface Message {
   role: "user" | "assistant"
   content: string
   reasoning_content?: string // 推理链输出
+  model?: string;
 }
 
 export default function ChatStreamLayout() {
   const [messages, setMessages] = useState<Message[]>([
-    { role: "assistant", content: "🫡 Hi ! How can i help you today ?" },
+    { role: "assistant", content: "🫡 Hi ! How can i help you today ?", model:"初始化对话" },
   ])
   const [model, setModel] = useState<"deepseek-chat" | "deepseek-reasoner">("deepseek-chat")
   const [loading, setLoading] = useState(false)
@@ -25,7 +26,7 @@ export default function ChatStreamLayout() {
 
   // Log messages every time they change
   useEffect(() => {
-    console.log("Updated messages:", messages)
+    // console.log("Updated messages:", messages)
   }, [messages])
 
   useEffect(() => {
@@ -36,10 +37,10 @@ export default function ChatStreamLayout() {
     if (!input.trim()) return
     const userMsg: Message = { role: "user", content: input }
 
-    console.log("User message:", userMsg)
+    // console.log("User message:", userMsg)
 
     setMessages((prev) => {
-      console.log("Prev messages before adding user:", prev)
+      // console.log("Prev messages before adding user:", prev)
       return [...prev, userMsg] // 用户消息加入
     })
 
@@ -50,8 +51,8 @@ export default function ChatStreamLayout() {
     await sendMessage(
       [...messages, userMsg],
       (text: string, reasoning: string) => {
-        console.log("Streamed text:", text)
-        console.log("Streamed reasoning:", reasoning)
+        // console.log("Streamed text:", text)
+        // console.log("Streamed reasoning:", reasoning)
 
         setPartial(text)
 
@@ -66,6 +67,7 @@ export default function ChatStreamLayout() {
               role: "assistant",
               content: "",
               reasoning_content: "",
+              model: model,
             };
             newMessages.push(newAssistantMessage);
           } else {
@@ -74,8 +76,8 @@ export default function ChatStreamLayout() {
             lastMessage.content = text;
           }
 
-          console.log("Messages before reasoning update:", newMessages);
-          console.log("Last message before reasoning update:", lastMessage);
+          // console.log("Messages before reasoning update:", newMessages);
+          // console.log("Last message before reasoning update:", lastMessage);
           
           // 返回新数组，确保每个消息的推理链独立更新
           return newMessages;
@@ -95,48 +97,57 @@ export default function ChatStreamLayout() {
   return (
     <div className="flex h-screen bg-white dark:bg-[#1a1a1a] text-black dark:text-white transition-colors duration-300">
       {/* Sidebar */}
-      <aside className="w-16 bg-gray-100 dark:bg-gray-900 flex flex-col items-center gap-4 py-4">
-        <div className="w-10 h-10 bg-blue-500 text-white rounded-full flex items-center justify-center"><DeepSeekIcon /></div>
+      <aside className="w-16 bg-blue-100 dark:bg-gray-900 flex flex-col items-center gap-4 py-4">
+        <div className="w-10 h-10 bg-blue-200 text-white rounded-full flex items-center justify-center"><DeepSeekIcon /></div>
       </aside>
 
       {/* Chat area */}
       <main className="flex-1 flex flex-col">
         {/* Header */}
-        <div className="p-4 border-b bg-gray-100 dark:bg-gray-900 dark:border-gray-700 font-bold text-lg">
+        <div className="p-4 border-b bg-blue-200 dark:bg-gray-900 border-gray-200 dark:border-gray-700 font-bold text-lg">
           ✨AstraFlow ChatUI
         </div>
 
         {/* Messages */}
-        <ScrollArea className="flex-1 p-4 space-y-3">
+        <ScrollArea className="flex-1 p-4 space-y-0">
           {messages.map((msg, idx) => (
             <div key={idx} className={`flex ${msg.role === "user" ? "justify-end" : "justify-start"}`}>
-              <div
-                className={cn(
-                  "max-w-[75%] px-4 py-2 rounded-xl text-sm shadow whitespace-pre-wrap",
-                  msg.role === "user"
-                    ? "bg-blue-600 text-white rounded-br-none"
-                    : "bg-gray-200 dark:bg-gray-700 text-black dark:text-white rounded-bl-none"
-                )}
-              >
-                {msg.role === "user" ? (
-                  msg.content
-                ) : (
+              <div className="relative max-w-[75%]">
+                <div
+                  className={cn(
+                    "px-4 py-2 rounded-xl text-sm shadow",
+                    msg.role === "user"
+                      ? "bg-blue-600 text-white"
+                      : "bg-gray-200 dark:bg-gray-700 text-black dark:text-white"
+                  )}
+                >
+                  {msg.role === "user" ? (
+                    msg.content
+                  ) : (
                     <>
-                    {console.log("Rendering message:", msg)}
-                    {loading && idx === messages.length - 1 && (
-                      <div className="text-sm text-muted-foreground animate-pulse">
-                      {model === "deepseek-chat" ? "DeepSeek-V3" : "DeepSeek-R1"} 正在思考中...
-                      </div>
-                    )}
-                    {/* Display reasoning content (streaming chain) */}
-                    {msg.reasoning_content && (
-                      <div className="mb-2 p-2 bg-gray-100 dark:bg-gray-700 rounded-lg border-l-4 border-blue-500 text-sm text-gray-600 dark:text-gray-400">
-                      <MarkdownMessage content={msg.reasoning_content} />
-                      </div>
-                    )}
-                    {/* Display final message content */}
-                    <MarkdownMessage content={msg.content} />
+                      {loading && idx === messages.length - 1 && (
+                        <div className="text-sm text-muted-foreground animate-pulse">
+                          {model === "deepseek-chat" ? "DeepSeek-V3" : "DeepSeek-R1"} 正在思考中...
+                        </div>
+                      )}
+
+                      {msg.reasoning_content && (
+                        <div className="mb-2 p-2 bg-gray-100 dark:bg-gray-700 rounded-lg border-l-4 border-blue-500 text-sm text-gray-600 dark:text-gray-400">
+                          <MarkdownMessage content={msg.reasoning_content} />
+                        </div>
+                      )}
+
+                      <MarkdownMessage content={msg.content} />
                     </>
+                  )}
+                </div>
+
+                {/* 右下角模型角标（仅限助手消息，且加载完毕显示） */}
+                {msg.role === "assistant" &&
+                  (idx !== messages.length - 1 || (idx === messages.length - 1 && !loading)) && (
+                    <div className="absolute bottom-0 right-0 translate-x-1/3 translate-y-1/3 px-2 py-0.5 rounded-full bg-gray-300 dark:bg-gray-600 text-gray-700 dark:text-gray-200 text-[10px] shadow">
+                      {msg.model}
+                    </div>
                 )}
               </div>
             </div>
@@ -144,6 +155,7 @@ export default function ChatStreamLayout() {
 
           <div ref={bottomRef} />
         </ScrollArea>
+
 
         {/* Input */}
         <div className="flex justify-end px-4 pt-2">

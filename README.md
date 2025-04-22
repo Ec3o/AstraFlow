@@ -16,3 +16,4 @@ TodoList:
 好在有大佬写过博客踩过坑：
 [React的Markdown渲染](https://cytrogen.icu/posts/c0fc)
 想搞latex渲染，试了几个库都感觉效果不是很好，暂时搁置了。
+2025.4.22 修了一些小bug，感觉更ok了，顺便把主页变的更炫酷了一点
